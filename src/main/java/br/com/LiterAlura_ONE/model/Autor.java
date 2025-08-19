@@ -15,34 +15,34 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    private String nombre;
+    private String nome;
     private Integer anoNascimento;
     private Integer anoFalecimento;
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Livro> libro;
+    private List<Livro> livro;
 
     public Autor(){}
 
     public Autor(DadosAutor dadosAutor){
-        this.nombre= dadosAutor.nombre();
-        this.anoNascimento = dadosAutor.fechaNacimiento();
-        this.anoFalecimento = dadosAutor.fechaFallecimiento();
+        this.nome= dadosAutor.nome();
+        this.anoNascimento = dadosAutor.anoNascimento();
+        this.anoFalecimento = dadosAutor.anoFalecimento();
     }
 
     @Override
     public String toString() {
         StringBuilder livrosStr = new StringBuilder();
-        livrosStr.append("Libros: ");
+        livrosStr.append("Livros: ");
 
-        for(int i = 0; i < libro.size() ; i++) {
-            livrosStr.append(libro.get(i).getTitulo());
-            if (i < libro.size() - 1 ){
+        for(int i = 0; i < livro.size() ; i++) {
+            livrosStr.append(livro.get(i).getTitulo());
+            if (i < livro.size() - 1 ){
                 livrosStr.append(", ");
             }
         }
         return String.format("********** Autor **********%nNome:" +
                 " %s%n%s%nAno de Nascimento: %s%nAno de Falecimento:" +
-                " %s%n***************************%n",nombre,livrosStr.toString(),anoNascimento,anoFalecimento);
+                " %s%n***************************%n",nome,livrosStr.toString(),anoNascimento,anoFalecimento);
     }
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class Autor {
     }
 
     public String getNome() {
-        return nombre;
+        return nome;
     }
 
     public void setNome(String nombre) {
-        this.nombre = nombre;
+        this.nome = nombre;
     }
 
     public Integer getAnoNascimento() {

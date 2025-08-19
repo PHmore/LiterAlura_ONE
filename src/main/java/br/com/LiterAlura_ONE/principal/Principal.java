@@ -33,15 +33,15 @@ public class Principal {
         while (opcao != 0) {
             System.out.println("*********************************\n");
             var menu = """
-                    1 - Buscar libros por título
-                    2 - Mostrar libros registrados
+                    1 - Buscar livros por título
+                    2 - Mostrar livros registrados
                     3 - Mostrar autores registrados
-                    4 - Autores vivos en determinado año
-                    5 - Buscar libros por idioma
-                    6 - Top 10 libros más descargados
-                    7 - Libro más descargado y menos descargado 
+                    4 - Autores vivos em determinado ano
+                    5 - Buscar livros por idioma
+                    6 - Top 10 lviros mais baixados
+                    7 - Livro mais baixado e menos baixado 
                     
-                    0 - Salir
+                    0 - Sair
                     
                     """;
 
@@ -52,94 +52,94 @@ public class Principal {
                 leitura.nextLine();
             }
             opcao = leitura.nextInt();
-            teclado.nextLine();
-            switch (opcion) {
+            leitura.nextLine();
+            switch (opcao) {
                 case 1:
-                    buscarLibro();
+                    buscarLivro();
                     break;
                 case 2:
-                    mostrarLibros();
+                    mostrarLivros();
                     break;
                 case 3:
                     mostrarAutores();
                     break;
                 case 4:
-                    autoresVivosPorAnio();
+                    autoresVivosPorAno();
                     break;
                 case 5:
-                    buscarLibroPorIdioma();
+                    buscarLivroPorIdioma();
                     break;
                 case 6:
-                    top10LibrosMasDescargados();
+                    top10LivrosMaisBaixados();
                     break;
                 case 7:
-                    rankingLibro();
+                    rankingLivro();
                     break;
                 case 0:
-                    System.out.println("Finalizando  la aplicación");
+                    System.out.println("Finalizando a aplicação");
                     break;
                 default:
-                    System.out.printf("Opción inválida\n");
+                    System.out.printf("Opção inválida\n");
             }
         }
     }
 
-    private DatosBusqueda getBusqueda() {
-        System.out.println("Escribe el nombre del libro: ");
-        var nombreLibro = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + nombreLibro.replace(" ", "%20"));
-        DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
-        return datos;
+    private DadosBuscados getBusca() {
+        System.out.println("Escreva o nome do livro: ");
+        var nomeLivro = leitura.nextLine();
+        var json = consumoApi.obterDados(URL_BASE + nomeLivro.replace(" ", "%20"));
+        DadosBuscados dados = conversor.obterDados(json, DadosBuscados.class);
+        return dados;
 
     }
 
-    private void buscarLibro() {
-        DatosBusqueda datosBusqueda = getBusqueda();
-        if (datosBusqueda != null && !datosBusqueda.resultado().isEmpty()) {
-            DatosLibros primerLibro = datosBusqueda.resultado().get(0);
+    private void buscarLivro() {
+        DadosBuscados dadosBuscados = getBusca();
+        if (dadosBuscados != null && !dadosBuscados.resultado().isEmpty()) {
+            DadosLivros primeiroLivro = dadosBuscados.resultado().get(0);
 
 
-            Libro libro = new Libro(primerLibro);
-            System.out.println("***** Libro *****");
-            System.out.println(libro);
+            Livro livro = new Livro(primeiroLivro);
+            System.out.println("***** Livro *****");
+            System.out.println(livro);
             System.out.println("*****************");
 
-            Optional<Libro> libroExiste = repositoryLibro.findByTitulo(libro.getTitulo());
-            if (libroExiste.isPresent()){
-                System.out.println("\nEl libro ya esta registrado\n");
+            Optional<Livro> livroExiste = repositoryLivro.findByTitulo(livro.getTitulo());
+            if (livroExiste.isPresent()){
+                System.out.println("\nO livro já está registrado\n");
             }else {
 
-                if (!primerLibro.autor().isEmpty()) {
-                    DatosAutor autor = primerLibro.autor().get(0);
+                if (!primeiroLivro.autor().isEmpty()) {
+                    DadosAutor autor = primeiroLivro.autor().get(0);
                     Autor autor1 = new Autor(autor);
-                    Optional<Autor> autorOptional = repositoryAutor.findByNombre(autor1.getNombre());
+                    Optional<Autor> autorOptional = repositoryAutor.findByNome(autor1.getNome());
 
                     if (autorOptional.isPresent()) {
                         Autor autorExiste = autorOptional.get();
-                        libro.setAutor(autorExiste);
-                        repositoryLibro.save(libro);
+                        livro.setAutor(autorExiste);
+                        repositoryLivro.save(livro);
                     } else {
-                        Autor autorNuevo = repositoryAutor.save(autor1);
-                        libro.setAutor(autorNuevo);
-                        repositoryLibro.save(libro);
+                        Autor autorNovo = repositoryAutor.save(autor1);
+                        livro.setAutor(autorNovo);
+                        repositoryLivro.save(livro);
                     }
 
-                    Integer numeroDescargas = libro.getNumero_descargas() != null ? libro.getNumero_descargas() : 0;
-                    System.out.println("********** Libro **********");
-                    System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargas: %s%n",
-                            libro.getTitulo(), autor1.getNombre(), libro.getLenguaje(), libro.getNumero_descargas());
+                    Integer downNum = livro.getDownNum() != null ? livro.getDownNum() : 0;
+                    System.out.println("********** Livro **********");
+                    System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de downloads: %s%n",
+                            livro.getTitulo(), autor1.getNome(), livro.getLinguagem(), livro.getDownNum());
                     System.out.println("***************************\n");
                 } else {
-                    System.out.println("Sin autor");
+                    System.out.println("Sem autor");
                 }
             }
         } else {
-            System.out.println("libro no encontrado");
+            System.out.println("livro não encontrado");
         }
     }
-    private void mostrarLibros() {
-        libros = repositoryLibro.findAll();
-        libros.stream()
+    private void mostrarLivros() {
+        livros = repositoryLivro.findAll();
+        livros.stream()
                 .forEach(System.out::println);
     }
 
@@ -149,57 +149,57 @@ public class Principal {
                 .forEach(System.out::println);
     }
 
-    private void autoresVivosPorAnio() {
-        System.out.println("Ingresa el año vivo de autor(es) que desea buscar: ");
-        var anio = teclado.nextInt();
-        autores = repositoryAutor.listaAutoresVivosPorAnio(anio);
+    private void autoresVivosPorAno() {
+        System.out.println("Coloque o ano do autor que deseja buscar: ");
+        var ano = leitura.nextInt();
+        autores = repositoryAutor.listaAutoresVivosPorAno(ano);
         autores.stream()
                 .forEach(System.out::println);
     }
 
-    private List<Libro> datosBusquedaLenguaje(String idioma){
+    private List<Livro> dadosBuscadosLinguagem(String idioma){
         var dato = Idioma.fromString(idioma);
         System.out.println("Lenguaje buscado: " + dato);
 
-        List<Libro> libroPorIdioma = repositoryLibro.findByLenguaje(dato);
-        return libroPorIdioma;
+        List<Livro> livroPorIdioma = repositoryLivro.findByLinguagem(dato);
+        return livroPorIdioma;
     }
 
-    private void buscarLibroPorIdioma(){
-        System.out.println("Selecciona el lenguaje/idioma que deseas buscar: ");
+    private void buscarLivroPorIdioma(){
+        System.out.println("Selecione o idioma que deseja buscar: ");
 
-        var opcion = -1;
-        while (opcion != 0) {
+        var opcao = -1;
+        while (opcao != 0) {
             var opciones = """
                     1. en - Ingles
                     2. es - Español
                     3. fr - Francés
                     4. pt - Portugués
                     
-                    0. Volver a Las opciones anteriores
+                    0. Voltar as opções anteriores
                     """;
             System.out.println(opciones);
-            while (!teclado.hasNextInt()) {
-                System.out.println("Formato inválido, ingrese un número que esté disponible en el menú");
-                teclado.nextLine();
+            while (!leitura.hasNextInt()) {
+                System.out.println("Formato inválido, coloque um número do menu");
+                leitura.nextLine();
             }
-            opcion = teclado.nextInt();
-            teclado.nextLine();
-            switch (opcion) {
+            opcao = leitura.nextInt();
+            leitura.nextLine();
+            switch (opcao) {
                 case 1:
-                    List<Libro> librosEnIngles = datosBusquedaLenguaje("[en]");
+                    List<Livro> librosEnIngles = dadosBuscadosLinguagem("[en]");
                     librosEnIngles.forEach(System.out::println);
                     break;
                 case 2:
-                    List<Libro> librosEnEspanol = datosBusquedaLenguaje("[es]");
+                    List<Livro> librosEnEspanol = dadosBuscadosLinguagem("[es]");
                     librosEnEspanol.forEach(System.out::println);
                     break;
                 case 3:
-                    List<Libro> librosEnFrances = datosBusquedaLenguaje("[fr]");
+                    List<Livro> librosEnFrances = dadosBuscadosLinguagem("[fr]");
                     librosEnFrances.forEach(System.out::println);
                     break;
                 case 4:
-                    List<Libro> librosEnPortugues = datosBusquedaLenguaje("[pt]");
+                    List<Livro> librosEnPortugues = dadosBuscadosLinguagem("[pt]");
                     librosEnPortugues.forEach(System.out::println);
                     break;
                 case 0:
@@ -210,31 +210,31 @@ public class Principal {
         }
     }
 
-    private void top10LibrosMasDescargados() {
-        List<Libro> topLibros = repositoryLibro.top10LibrosMasDescargados();
+    private void top10LivrosMaisBaixados() {
+        List<Livro> topLibros = repositoryLivro.top10LivrosMaisBaixados();
         topLibros.forEach(System.out::println);
     }
 
-    private void rankingLibro() {
-        libros = repositoryLibro.findAll();
-        IntSummaryStatistics est = libros.stream()
-                .filter(l -> l.getNumero_descargas() > 0)
-                .collect(Collectors.summarizingInt(Libro::getNumero_descargas));
+    private void rankingLivro() {
+        livros = repositoryLivro.findAll();
+        IntSummaryStatistics est = livros.stream()
+                .filter(l -> l.getDownNum() > 0)
+                .collect(Collectors.summarizingInt(Livro::getDownNum));
 
-        Libro libroMasDescargado = libros.stream()
-                .filter(l -> l.getNumero_descargas() == est.getMax())
+        Livro livroMaisBaixado = livros.stream()
+                .filter(l -> l.getDownNum() == est.getMax())
                 .findFirst()
                 .orElse(null);
 
-        Libro libroMenosDescargado = libros.stream()
-                .filter(l -> l.getNumero_descargas() == est.getMin())
+        Livro livroMenosBaixado = livros.stream()
+                .filter(l -> l.getDownNum() == est.getMin())
                 .findFirst()
                 .orElse(null);
         System.out.println("******************************************************");
-        System.out.printf("%nLibro más descargado: %s%nNúmero de descargas: " +
-                        "%d%n%nLibro menos descargado: %s%nNúmero de descargas: " +
-                        "%d%n%n",libroMasDescargado.getTitulo(),est.getMax(),
-                libroMenosDescargado.getTitulo(),est.getMin());
+        System.out.printf("%nLivro mais baixado: %s%nNúmero de downloads: " +
+                        "%d%n%nLivro menos baixado: %s%nNúmero de downloads: " +
+                        "%d%n%n",livroMaisBaixado.getTitulo(),est.getMax(),
+                livroMenosBaixado.getTitulo(),est.getMin());
         System.out.println("******************************************************");
     }
 

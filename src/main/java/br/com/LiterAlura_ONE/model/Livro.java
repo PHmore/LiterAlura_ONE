@@ -21,7 +21,7 @@ public class Livro {
 
     public Livro(DadosLivros dadosLivros){
         this.titulo = dadosLivros.titulo();
-        this.linguagem = Idioma.fromString(dadosLivros.idiomas().toString().split(",")[0].trim());
+        this.linguagem = Idioma.fromString(dadosLivros.idiomas().get(0));
         this.downNum = dadosLivros.downNum();
     }
 

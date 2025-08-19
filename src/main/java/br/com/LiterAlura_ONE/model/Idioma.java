@@ -1,10 +1,11 @@
 package br.com.LiterAlura_ONE.model;
 
 public enum Idioma {
-    en("[en]", "Ingles"),
-    es("[es]", "Español"),
-    fr("[fr]", "Frances"),
-    pt("[pt]", "Portugues");
+    en("en", "Ingles"),
+    es("es", "Español"),
+    fr("fr", "Frances"),
+    pt("pt", "Portugues");
+
 
     private String idiomaGutendex;
     private String idiomaPortugues;
