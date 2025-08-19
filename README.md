@@ -1,5 +1,7 @@
 <h1 align="center"> Desafio Literalura - Formação ONE Alura & Oracle </h1>
 
+<img width="410" height="410" alt="Badge-Literalura" src="https://github.com/user-attachments/assets/e482969b-305b-4d46-9d2b-bb4fa9e15a5e" />
+
 
 ##  Descrição
 
